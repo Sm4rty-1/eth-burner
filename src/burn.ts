@@ -1,4 +1,4 @@
-import { utils, Wallet } from "ethers";
+import { utils, Wallet, ethers } from "ethers";
 import args from "./args";
 import { gasPriceToGwei } from "./util";
 const { formatEther } = utils;
@@ -11,13 +11,21 @@ const burn = async (burnWallet: Wallet) => {
         return;
     }
 
-    const gas = await provider.getGasPrice();
-    const gasPrice = gasPrice.mul(1.5);
+    const RPC_URL = args.rpcUrl;
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const raw_gasPrice = await provider.getGasPrice();
+    
+    const gasPrice = raw_gasPrice.mul(14).div(10); // Change it accordingly 14 means 1.5X 
 
-    // const gasPrice = balance.div(21000);
-
+    if (balance.lt(gasPrice.mul(21000))) {
+        console.log(`Balance too low to burn (balance=${formatEther(balance)} gasPrice=${gasPriceToGwei(gasPrice)}) gwei`);
+        return;
+    }
+    
+    // Calculate leftovers after deducting gas cost
     const leftovers = balance.sub(gasPrice.mul(21000));
     console.log(`Leftovers: ${formatEther(leftovers)} ETH`);
+    
 
     try {
         console.log(`Burning ${formatEther(balance)}`);

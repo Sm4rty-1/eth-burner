@@ -17,4 +17,4 @@ yarn start \
     -b <pubkey> # OPTIONAL address to receive un-burnable leftovers, defaults to 0xfb000000387627910184cc42fc92995913806333
 ```
 
-_If you want to test this out without burning real ETH, use a testnet provider or a hardhat fork with url `http://localhost:8545`._
+_If you want to test this out without burning real ETH, use a testnet provider or a hardhat fork with url `http://localhost:8545`.
