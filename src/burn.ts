@@ -15,7 +15,7 @@ const burn = async (burnWallet: Wallet) => {
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const raw_gasPrice = await provider.getGasPrice();
     
-    const gasPrice = raw_gasPrice.mul(14).div(10); // Change it accordingly 14 means 1.5X 
+    const gasPrice = raw_gasPrice.mul(25).div(10); // Change it accordingly. For example 25 means 2.5X
 
     if (balance.lt(gasPrice.mul(21000))) {
         console.log(`Balance too low to burn (balance=${formatEther(balance)} gasPrice=${gasPriceToGwei(gasPrice)}) gwei`);
