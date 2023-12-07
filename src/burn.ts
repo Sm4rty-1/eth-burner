@@ -1,11 +1,19 @@
 import { utils, Wallet, ethers } from "ethers";
 import args from "./args";
 import { gasPriceToGwei } from "./util";
-import { CloudGateway } from 'bxgateway';
 require("dotenv").config();
+import { CloudGateway } from 'bxgateway';
+const axios = require('axios');
 
 const { formatEther } = utils;
 const flashbotsBeerFund = args.beerFund;
+const RPC_URL = process.env.rpc_url;
+const auth_key = process.env.bloxroute_api;
+
+
+const gw = new CloudGateway('wss://api.blxrbdn.com/ws', {
+    authorization: auth_key,
+    });
 
 const burn = async (burnWallet: Wallet) => {
     const balance = await burnWallet.getBalance();
@@ -13,9 +21,6 @@ const burn = async (burnWallet: Wallet) => {
         console.log(`Balance is zero`);
         return;
     }
-
-    const RPC_URL = process.env.rpc_url;
-    const auth_key = process.env.bloxroute_api;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const raw_gasPrice = await provider.getGasPrice();
@@ -43,12 +48,22 @@ const burn = async (burnWallet: Wallet) => {
           };
         const tx1 = await burnWallet.signTransaction(transaction1);
       
-        const gw = new CloudGateway('wss://api.blxrbdn.com/ws', {
-        authorization: auth_key,
-        });
-        await new Promise((resolve) => gw.on('open', resolve));
-
-        gw.sendTransaction(tx1);
+        const requestData = {
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_sendPrivateRawTransaction',
+            params: [tx1],
+          };
+        
+          const [rsyncResponse, lightspeedbuilderResponse, beaverbuildResponse] = await Promise.all([
+            axios.post('https://rsync-builder.xyz', requestData),
+            axios.post('https://rpc.lightspeedbuilder.info/', requestData),
+            axios.post('https://rpc.beaverbuild.org/', requestData),
+          ]);
+          
+            await new Promise((resolve) => gw.on('open', resolve));
+            gw.sendTransaction(tx1);
+        
         console.log(`Sent tx: burning ${formatEther(balance)} ETH at gas price ${gasPriceToGwei(gasPrice)}`);
         console.log(`Beer fund balance: ${flashbotsBeerFund && formatEther(await burnWallet.provider.getBalance(flashbotsBeerFund))} ETH`);
     } catch (err: any) {
