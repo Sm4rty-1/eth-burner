@@ -2,6 +2,8 @@ import { utils, Wallet, ethers } from "ethers";
 import args from "./args";
 import { gasPriceToGwei } from "./util";
 import { CloudGateway } from 'bxgateway';
+require("dotenv").config();
+
 const { formatEther } = utils;
 const flashbotsBeerFund = args.beerFund;
 
@@ -12,8 +14,8 @@ const burn = async (burnWallet: Wallet) => {
         return;
     }
 
-    const RPC_URL = process.env.RPC_URL;
-    const auth_key = process.env.BLOXROUTE_API_KEY;
+    const RPC_URL = process.env.rpc_url;
+    const auth_key = process.env.bloxroute_api;
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const raw_gasPrice = await provider.getGasPrice();

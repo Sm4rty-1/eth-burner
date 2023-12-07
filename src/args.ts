@@ -2,7 +2,6 @@ const cmdArgs = require("command-line-args");
 
 type Args = {
     privateKey: string,
-    bloxAuth: string, 
     beerFund?: string,
 };
 

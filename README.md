@@ -6,8 +6,8 @@ Technically, the ETH is not actually burned (permanently erased). It's just coll
 
 The script is using Bloxroute for sending txns. Add Bloxroute api and rpc_url to the the env file. 
 ```
-BLOXROUTE_API_KEY='YOUR_BLOXROUTE_API'
-RPC_URL='https://eth-mainnet.g.alchemy.com/v2/API_KEY'
+bloxroute_api='YOUR_BLOXROUTE_API'
+rpc_url='https://eth-mainnet.g.alchemy.com/v2/API_KEY'
 ```
 
 ## wanna burn?

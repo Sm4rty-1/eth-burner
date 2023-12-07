@@ -3,9 +3,10 @@ import { providers, Wallet } from "ethers";
 
 import args from "./args";
 import burn from "./burn";
+require("dotenv").config();
 
 // pulls args from cmd line
-const RPC_URL = args.rpcUrl;
+const RPC_URL = process.env.rpc_url;
 const VICTIM_KEY = args.privateKey;
 
 async function main() {
